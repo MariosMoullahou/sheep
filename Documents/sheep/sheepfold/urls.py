@@ -7,4 +7,5 @@ urlpatterns = [
     path("<int:pk>/", views.sheep_detail, name="sheep_detail"),
     path("lamping/",views.lamping, name="lamping"),
     path("milking/",views.milking, name="milking"),
+    path('api/milk/', views.milking_api, name='milking-api'),
 ]

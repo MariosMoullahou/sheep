@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Sheep,BirthEvent,Milk
 from sheepfold.forms import SheepForm,SheepingForm,MilkForm
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
-from django.shortcuts import render, redirect
 from .forms import SheepingForm
-from .models import Sheep
+from .serializers import MilkSerializer
 
 
 def homepage(request):
@@ -23,11 +25,23 @@ def sheep_create(request):
     return render(request, "sheep_form.html", {"form": form})
 
 def milking(request):
-    form = MilkForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        return redirect("homepage")
-    return render(request, "milking.html", {"form": form})
+    form = MilkForm()  # create a new empty form
+    milk = Milk.objects.all()  # fetch existing records
+    return render(request, "milking.html", {"form": form, "milk": milk})
+
+@api_view(['GET', 'POST'])
+def milking_api(request):
+    if request.method == 'GET':
+        milk = Milk.objects.all()
+        serializer = MilkSerializer(milk, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = MilkSerializer(data=request.data)  # <- use request.data
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def lamping(request):

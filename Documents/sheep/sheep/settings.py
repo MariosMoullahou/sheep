@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sheepfold',
     'measurment',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
