@@ -26,4 +26,5 @@ urlpatterns = [
     path("new/", views.sheep_create, name="sheep_create"),
     path("lamping/",views.lamping, name="lamping"),
     path("milking/", views.milking, name="milking"),
-]
+    path('', include('accounts.urls')),
+    ]
