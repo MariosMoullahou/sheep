@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
 
 def login_page(request):
     # Redirect already-logged-in users
     if request.user.is_authenticated:
-        return redirect('homepage')  # name of your homepage URL
+        return redirect('homepage')
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -21,7 +21,11 @@ def login_page(request):
             messages.error(request, "Invalid username or password.")
 
     return render(request, "login.html")
-# Optional: logout view
+
 def logout_page(request):
     logout(request)
     return redirect('login')
+
+@login_required(login_url='login')
+def homepage(request):
+    return render(request, "homepage.html")

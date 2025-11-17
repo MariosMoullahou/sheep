@@ -1,6 +1,15 @@
 <!-- sidebar.html -->
 <nav class="bg-light vh-100 p-3 shadow-sm d-flex flex-column">
-    <h4 class="mb-4 text-center text-primary">🐑 Sheep Farm</h4>
+    <h4 class="mb-4 text-center text-primary d-flex align-items-center justify-content-center">
+        <img src="/static/img/logo-sheeper-transparent.png" height="120" class="me-2" alt="Sheeper Logo">
+    </h4>
+
+    <div class="container-fluid">
+        <span class="navbar-text">
+        Welcome {{user.username}}
+        </span>
+    </div>
+
     <ul class="nav nav-pills flex-column gap-2">
         <li class="nav-item">
             <a class="nav-link {% if request.resolver_match.url_name == 'homepage' %}active{% endif %}" 
@@ -33,7 +42,6 @@
         </li>
     </ul>
 
-    <!-- Logout button -->
     {% if request.user.is_authenticated %}
     <div class="mt-auto mb-2 text-center">
         <form method="POST" action="{% url 'logout' %}">
@@ -44,6 +52,7 @@
         </form>
     </div>
     {% endif %}
+
 
     <div class="mt-auto text-center">
         <small class="text-muted">© 2025 Sheep Farm</small>
