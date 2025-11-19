@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.decorators import login_required
 from .forms import SheepingForm
-from .serializers import MilkSerializer
+from .serializers import MilkSerializer,SheepData
 
 @login_required(login_url='login')
 def homepage(request):
@@ -46,6 +46,22 @@ def milking_api(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@login_required(login_url='login')
+@api_view(['GET','POST'])
+def sheep_data_api(request):
+    if request.method == 'GET':
+        sheep = Sheep.objects.all()
+        serializer = SheepData(sheep, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        serializer = SheepData(data= request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 @login_required(login_url='login')
 def lamping(request):

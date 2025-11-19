@@ -4,12 +4,6 @@
         <img src="/static/img/logo-sheeper-transparent.png" height="120" class="me-2" alt="Sheeper Logo">
     </h4>
 
-    <div class="container-fluid">
-        <span class="navbar-text">
-        Welcome {{user.username}}
-        </span>
-    </div>
-
     <ul class="nav nav-pills flex-column gap-2">
         <li class="nav-item">
             <a class="nav-link {% if request.resolver_match.url_name == 'homepage' %}active{% endif %}" 

@@ -8,4 +8,5 @@ urlpatterns = [
     path("lamping/",views.lamping, name="lamping"),
     path("milking/",views.milking, name="milking"),
     path('api/milk/', views.milking_api, name='milking-api'),
+    path('api/sheep/',views.sheep_data_api, name='sheep-data-api'),
 ]

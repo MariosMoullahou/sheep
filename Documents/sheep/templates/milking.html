@@ -6,23 +6,32 @@
 {% endblock %}
 
 {% block page %}
-<p class="text-center fs-2">Milking</p>    
-
 <div class="container text-center">
   <div class="row">
-    <div class="col-8">
-        <div id="example-table"></div>
-    </div>
-    <div class="col-4">
-        <!-- Form -->
-        <form id="milk-form">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-success mt-2">Save</button>
-            <a href="{% url 'homepage' %}" class="btn btn-secondary mt-2">Cancel</a>
-        </form>
 
+    <!-- TABLE -->
+    <div class="col-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div id="example-table"></div>
+        </div>
+      </div>
     </div>
+
+    <!-- FORM -->
+    <div class="col-4">
+      <div class="card shadow-sm mt-3 mt-md-0">
+        <div class="card-body">
+          <form id="milk-form">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit" class="btn btn-success mt-2">Save</button>
+              <a href="{% url 'homepage' %}" class="btn btn-secondary mt-2">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 <script>
