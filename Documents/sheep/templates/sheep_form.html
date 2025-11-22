@@ -22,12 +22,22 @@
     <div class="col-4">
       <div class="card shadow-sm mt-3 mt-md-0">
         <div class="card-body">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-success mt-2">Save</button>
-                <a href="{% url 'homepage' %}" class="btn btn-secondary mt-2">Cancel</a>
-            </form>
+          <p class="fs-4 text-center">Create Sheep</p>
+          <form id="sheep-form">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="sheep_name" class="form-label">Sheep name</label>
+              <input id="sheep_name" name="name" type="text" class="form-control" placeholder="Name">
+            </div>
+
+            <div class="mb-3">
+              <label for="sheep_gender" class="form-label">Sheep Gender</label>
+              <input id="sheep_gender" name="Gender" type="text" class="form-control" placeholder="Gender">
+            </div>
+
+            <button type="submit" class="btn btn-success me-md-2 ">Save</button>
+          </form>
         </div>
       </div>
     </div>
@@ -35,6 +45,47 @@
   </div>
 </div>
 <script>
+    document.getElementById('sheep-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const form = e.target;
+
+      // Collect form data
+      const formData = {};
+      form.querySelectorAll('input, select, textarea').forEach(input => {
+          if (input.name) formData[input.name] = input.value;
+      });
+
+      // Get CSRF token
+      const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      // Post the data
+      const response = await fetch("{% url 'sheep-data-api' %}", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": csrfToken
+          },
+          body: JSON.stringify(formData)
+      });
+
+      // Handle response
+      if (response.ok) {
+          const data = await response.json();
+
+          // Add the new row to Tabulator
+          table.updateOrAddData([data]); // works for adding single or multiple rows
+
+          // Reset form
+          form.reset();
+
+          console.log("New row added:", data);
+      } else {
+          const errors = await response.json();
+          alert("Error: " + JSON.stringify(errors));
+      }
+    });
+
     var table = new Tabulator("#example-table", {
     ajaxURL: "/api/sheep/",
     layout:"fitColumns",      //fit columns to width of table
@@ -55,7 +106,7 @@
         {title:"Sheep ID", field:"id"},
         {title:"Name", field:"name"},
         {title: "Earing", field: "earing"},
-        {title: "Birthdate",field: "birhtdate", sorter:"date"},
+        {title: "Birthdate",field: "birthdate", sorter:"date"},
         {title: "Gender", field: "gender"},
         {title: "Mother", field: "mother"},
     ],

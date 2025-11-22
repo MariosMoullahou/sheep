@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.decorators import login_required
 from .forms import SheepingForm
-from .serializers import MilkSerializer,SheepData
+from .serializers import MilkSerializer,SheepData,BirthEventSerializer
 
 @login_required(login_url='login')
 def homepage(request):
@@ -28,9 +28,9 @@ def sheep_create(request):
 
 @login_required(login_url='login')
 def milking(request):
-    form = MilkForm()  # create a new empty form
     milk = Milk.objects.all()  # fetch existing records
-    return render(request, "milking.html", {"form": form, "milk": milk})
+    sheep = Sheep.objects.all()
+    return render(request, "milking.html", {"sheep": sheep, "milk": milk})
 
 @login_required(login_url='login')
 @api_view(['GET', 'POST'])
@@ -41,7 +41,25 @@ def milking_api(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
+        print(request.data)
         serializer = MilkSerializer(data=request.data)  # <- use request.data
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@login_required(login_url='login')
+@api_view(['GET', 'POST'])
+def birthevent_api(request):
+    if request.method == 'GET':
+        milk = BirthEvent.objects.all()
+        serializer = BirthEventSerializer(milk, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        print(request.data)
+        serializer = BirthEventSerializer(data=request.data)  # <- use request.data
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -56,6 +74,7 @@ def sheep_data_api(request):
         return Response(serializer.data)
     
     elif request.method == 'POST':
+        print(request.data)
         serializer = SheepData(data= request.data)
         if serializer.is_valid():
             serializer.save()
@@ -67,6 +86,7 @@ def sheep_data_api(request):
 def lamping(request):
     if request.method == 'POST':
         form = SheepingForm(request.POST)
+        print(form)
         if form.is_valid():
             birth_event = form.save(commit=False)
             birth_event.save()

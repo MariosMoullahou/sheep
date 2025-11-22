@@ -22,11 +22,21 @@
     <div class="col-4">
       <div class="card shadow-sm mt-3 mt-md-0">
         <div class="card-body">
+          <p class="fs-4 text-center">Add milk measurment </p>
           <form id="milk-form">
-              {% csrf_token %}
-              {{ form.as_p }}
-              <button type="submit" class="btn btn-success mt-2">Save</button>
-              <a href="{% url 'homepage' %}" class="btn btn-secondary mt-2">Cancel</a>
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="sheep_id" class="form-label">Sheep Ear Tag</label>
+              <input id="sheep_id" name="sheep" type="text" class="form-control" placeholder="ID">
+            </div>
+
+            <div class="mb-3">
+              <label for="sheep_milk" class="form-label">Milk Measurment</label>
+              <input id="sheep_milk" name="milk" type="text" class="form-control" placeholder="Liters">
+            </div>
+
+            <button type="submit" class="btn btn-success me-md-2 ">Save</button>
           </form>
         </div>
       </div>
@@ -39,32 +49,43 @@ document.getElementById('milk-form').addEventListener('submit', async function(e
     e.preventDefault();
 
     const form = e.target;
+
+    // Collect form data
     const formData = {};
     form.querySelectorAll('input, select, textarea').forEach(input => {
         if (input.name) formData[input.name] = input.value;
     });
 
+    // Get CSRF token
+    const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // Post the data
     const response = await fetch("{% url 'milking-api' %}", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "X-CSRFToken": form.querySelector('[name=csrfmiddlewaretoken]').value
+            "X-CSRFToken": csrfToken
         },
         body: JSON.stringify(formData)
     });
 
+    // Handle response
     if (response.ok) {
         const data = await response.json();
 
-        // Just add the new row directly — faster and cleaner
-        table.updateOrAddData([data]);
+        // Add the new row to Tabulator
+        table.updateOrAddData([data]); // works for adding single or multiple rows
 
+        // Reset form
         form.reset();
+
+        console.log("New row added:", data);
     } else {
         const errors = await response.json();
         alert("Error: " + JSON.stringify(errors));
     }
 });
+
 
 var table = new Tabulator("#example-table", {
     ajaxURL: "/api/milk/",
@@ -83,6 +104,7 @@ var table = new Tabulator("#example-table", {
         tooltip:true,         //show tool tips on cells
     },
     columns:[                 //define the table columns
+        {title:"Meas ID", field:"id"},
         {title:"Sheep ID", field:"sheep"},
         {title:"Date", field:"date",sorter:"date"},
         {title: "Milk (L)", field: "milk"},
