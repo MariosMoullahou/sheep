@@ -4,7 +4,7 @@ from .models import Sheep,BirthEvent,Milk
 class SheepForm(forms.ModelForm):
     class Meta:
         model = Sheep
-        fields = ["name", "earing", "gender"]
+        fields = ["earing", "gender"]
 
 class SheepingForm(forms.ModelForm):
     class Meta:

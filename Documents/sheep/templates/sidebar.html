@@ -8,16 +8,21 @@
     letter-spacing: 1px;    /* small spacing for modern look */
     color: #001f47;         /* modern blue tone */
 }
-</style>
 
-<!-- sidebar.html -->
+.nav-link.active {
+    background-color: #d0fbc8;
+    color: #001f47;
+    border-radius: .5rem;
+}
+
+</style>
 <nav class="bg-light vh-100 p-3 shadow-sm d-flex flex-column">
     <h4 class="mb-4 text-center text-primary d-flex align-items-center justify-content-center">
         <img src="/static/img/head.png" height="50" class="me-2" alt="Sheeper Logo">
         <span class="sheeper-brand">Sheeper</span>
     </h4>
 
-    <ul class="nav nav-pills flex-column gap-2">
+    <ul class="nav flex-column gap-2">
         <li class="nav-item">
             <a class="nav-link {% if request.resolver_match.url_name == 'homepage' %}active{% endif %}" 
                href="{% url 'homepage' %}">
@@ -37,8 +42,9 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="bi bi-calendar3 me-2"></i> Calendar
+            <a class="nav-link {% if request.resolver_match.url_name == 'calendar' %}active{% endif %}"
+                href="{% url 'calendar' %}">
+                <i class="bi bi-calendar me-2"></i> Calendar
             </a>
         </li>
         <li class="nav-item">

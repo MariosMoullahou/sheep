@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sheepfold',
-    'measurment',
     'rest_framework',
     'accounts',
 ]

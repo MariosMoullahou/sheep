@@ -10,4 +10,5 @@ urlpatterns = [
     path('api/milk/', views.milking_api, name='milking-api'),
     path('api/sheep/',views.sheep_data_api, name='sheep-data-api'),
     path('api/birthevent/',views.birthevent_api, name='birthevent-data-api'),
+    path("calendar/",views.calendar_view, name="calendar"),
 ]

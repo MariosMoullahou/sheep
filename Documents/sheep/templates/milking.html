@@ -21,8 +21,10 @@
     <!-- FORM -->
     <div class="col-4">
       <div class="card shadow-sm mt-3 mt-md-0">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">Milking Measurment</h4>
+        </div>
         <div class="card-body">
-          <p class="fs-4 text-center">Add milk measurment </p>
           <form id="milk-form">
             {% csrf_token %}
 
@@ -34,6 +36,11 @@
             <div class="mb-3">
               <label for="sheep_milk" class="form-label">Milk Measurment</label>
               <input id="sheep_milk" name="milk" type="text" class="form-control" placeholder="Liters">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">date</label>
+              <input v-model="form.date" type="date" class="form-control" name="date" />
             </div>
 
             <button type="submit" class="btn btn-success me-md-2 ">Save</button>

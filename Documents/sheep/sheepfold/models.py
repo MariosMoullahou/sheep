@@ -2,18 +2,17 @@ from django.db import models
 from django.utils import timezone
 
 class Sheep(models.Model):
-    name = models.CharField(max_length=100)
-    earing = models.CharField(max_length=100, default="no_earring")
-    birthdate = models.DateField(auto_now_add=timezone.now)
+    earing = models.CharField(max_length=100,primary_key=True)
+    birthdate = models.DateField(null=True)
     gender_choices = [
         ('M', 'Male'),
         ('F', 'Female'),
     ]
-    gender = models.CharField(max_length=1, choices=gender_choices)
+    gender = models.CharField(max_length=1, choices=gender_choices, default='U')
     mother = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='children')
 
     def __str__(self):
-        return self.name
+        return self.earing
     
 class BirthEvent(models.Model):
     mother = models.ForeignKey(Sheep, on_delete=models.CASCADE, related_name='birth_events')
@@ -22,7 +21,7 @@ class BirthEvent(models.Model):
     lambs = models.ManyToManyField(Sheep, related_name='birth_event', blank=True)
 
     def __str__(self):
-        return f"Birth by {self.mother.name} on {self.date}"
+        return f"Birth by {self.mother.earing} on {self.date}"
     
 class Milk(models.Model):
     sheep = models.ForeignKey(
@@ -34,4 +33,4 @@ class Milk(models.Model):
     milk = models.DecimalField(max_digits=5, decimal_places=2, help_text="liter")
     
     def __str__(self):
-        return f"{self.sheep.name} - {self.date} ({self.milk} liter)"
+        return f"{self.sheep.earing} - {self.date} ({self.milk} liter)"

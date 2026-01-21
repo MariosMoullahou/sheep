@@ -22,4 +22,4 @@ class SheepData(serializers.ModelSerializer):
 class BirthEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = BirthEvent
-        fields = ["mother","date","lambs"]
+        fields = ["id","mother","date","lambs"]

@@ -109,3 +109,7 @@ def lamping(request):
 
     return render(request, 'lamping.html', {'form': form})
 
+@login_required(login_url='login')
+def calendar_view(request):
+    return render(request, "calendar.html")
+

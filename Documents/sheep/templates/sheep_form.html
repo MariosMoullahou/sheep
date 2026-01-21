@@ -21,19 +21,31 @@
     <!-- FORM -->
     <div class="col-4">
       <div class="card shadow-sm mt-3 mt-md-0">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">Create Sheep</h4>
+        </div>
         <div class="card-body">
-          <p class="fs-4 text-center">Create Sheep</p>
           <form id="sheep-form">
             {% csrf_token %}
 
             <div class="mb-3">
               <label for="sheep_name" class="form-label">Sheep name</label>
-              <input id="sheep_name" name="name" type="text" class="form-control" placeholder="Name">
+              <input id="sheep_name" name="earing" type="text" class="form-control" placeholder="Name">
             </div>
 
             <div class="mb-3">
               <label for="sheep_gender" class="form-label">Sheep Gender</label>
-              <input id="sheep_gender" name="Gender" type="text" class="form-control" placeholder="Gender">
+              <input id="sheep_gender" name="gender" type="text" class="form-control" placeholder="Gender">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Birthdate</label>
+              <input v-model="form.date" type="date" class="form-control" name="birthdate" />
+            </div>
+
+            <div class="mb-3">
+              <label for="sheep_mother" class="form-label">Sheep Mother</label>
+              <input id="sheep_gender" name="mother" type="text" class="form-control" placeholder="Mother id">
             </div>
 
             <button type="submit" class="btn btn-success me-md-2 ">Save</button>
@@ -42,6 +54,30 @@
       </div>
     </div>
 
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item">{{sheep.name}}</li>
+          <li class="list-group-item">A second item</li>
+          <li class="list-group-item">A third item</li>
+          <li class="list-group-item">A fourth item</li>
+          <li class="list-group-item">And a fifth one</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
   </div>
 </div>
 <script>
@@ -103,12 +139,24 @@
         tooltip:true,         //show tool tips on cells
     },
     columns:[                 //define the table columns
-        {title:"Sheep ID", field:"id"},
-        {title:"Name", field:"name"},
         {title: "Earing", field: "earing"},
         {title: "Birthdate",field: "birthdate", sorter:"date"},
         {title: "Gender", field: "gender"},
         {title: "Mother", field: "mother"},
+        {
+          title: "Data",
+          formatter: (cell, formatterParams) => {
+              return `<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        Info
+                      </button>`;
+          },
+          width: 120,
+          hozAlign: "center",
+          cellClick: (e, cell) => {
+              const rowData = cell.getRow().getData();
+              console.log("Edit clicked:", rowData);
+          }
+        }   
     ],
     });
 </script>    
