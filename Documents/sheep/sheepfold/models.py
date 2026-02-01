@@ -34,3 +34,14 @@ class Milk(models.Model):
     
     def __str__(self):
         return f"{self.sheep.earing} - {self.date} ({self.milk} liter)"
+
+class CalendarEvent(models.Model):
+    title =models.CharField(max_length=255)
+    start = models.DateField()
+    end = models.DateTimeField(null=True, blank=True)
+    group_id = models.CharField(
+        max_length=100,
+        blank=True,
+        db_index=True
+    )
+    color = models.CharField(max_length=50, blank=True)

@@ -27,4 +27,5 @@ urlpatterns = [
     path("lamping/",views.lamping, name="lamping"),
     path("milking/", views.milking, name="milking"),
     path('', include('accounts.urls')),
-    ]
+    path('calendar/api/calendar/', views.calendar_data_api, name='calendar-api'),
+]

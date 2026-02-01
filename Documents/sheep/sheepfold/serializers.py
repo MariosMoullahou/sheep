@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Milk,Sheep,BirthEvent
+from .models import Milk,Sheep,BirthEvent,CalendarEvent
 
 class MilkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,4 +22,9 @@ class SheepData(serializers.ModelSerializer):
 class BirthEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = BirthEvent
-        fields = ["id","mother","date","lambs"]
+        fields = ["earing","mother","date","lambs"]
+
+class CalendarEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CalendarEvent
+        fields = '__all__'

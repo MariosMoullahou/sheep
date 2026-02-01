@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Sheep,BirthEvent,Milk
+from .models import Sheep,BirthEvent,Milk,CalendarEvent
 from sheepfold.forms import SheepForm,SheepingForm,MilkForm
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.decorators import login_required
 from .forms import SheepingForm
-from .serializers import MilkSerializer,SheepData,BirthEventSerializer
+from .serializers import MilkSerializer,SheepData,BirthEventSerializer,CalendarEventSerializer
 
 @login_required(login_url='login')
 def homepage(request):
@@ -112,4 +112,20 @@ def lamping(request):
 @login_required(login_url='login')
 def calendar_view(request):
     return render(request, "calendar.html")
+
+@login_required(login_url='login')
+@api_view(['GET','POST'])
+def calendar_data_api(request):
+    if request.method == 'GET':
+        calendarEvent = CalendarEvent.objects.all()
+        serializer = CalendarEventSerializer(calendarEvent, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        print(request.data)
+        serializer = CalendarEventSerializer(data= request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

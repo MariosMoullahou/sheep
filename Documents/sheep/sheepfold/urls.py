@@ -11,4 +11,4 @@ urlpatterns = [
     path('api/sheep/',views.sheep_data_api, name='sheep-data-api'),
     path('api/birthevent/',views.birthevent_api, name='birthevent-data-api'),
     path("calendar/",views.calendar_view, name="calendar"),
-]
+    path('api/calendar/', views.calendar_data_api, name='calendar-api'),]
